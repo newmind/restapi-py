@@ -15,10 +15,9 @@ class Tournament(db.Model):
     endAt = db.Column(db.DateTime)
 
     def as_dict(self):
-        return dict((c.name,
-                     getattr(self, c.name))
-                     for c in self.__table__.columns)
-
+        return dict(
+            (c.name, getattr(self, c.name))
+            for c in self.__table__.columns)
 
 class Post(db.Model):
     __tablename__ = 'post'

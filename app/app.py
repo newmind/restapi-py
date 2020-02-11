@@ -80,15 +80,10 @@ def create_tournament():
         startAt=params.get('startAt'),
         endAt=params.get('endAt')
     )
-    # app.logger.info(tm)
-    # app.logger.info(tm.as_dict())
 
     db.session.add(tm)
     db.session.commit()
     db.session.flush()
-
-    # app.logger.info(tm)
-    # app.logger.info(tm.as_dict())
 
     return jsonify({'data': tm.as_dict(), 'message': 'OK'}), 201
 
@@ -104,7 +99,11 @@ def get_tournament(id):
 
 @app.route('/tournament/<int:id>', methods=['PATCH'])
 def update_tournament(id):
+    params = request.get_json()
+    Tournament.query.filter(Tournament.id==id).update(params)
     db.session.commit()
+    # app.debug(t)
+
     pass
 
 
