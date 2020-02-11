@@ -10,6 +10,11 @@
 
 
 ## Build and Run on Docker
+
+두개의 컨테이너로 구성 
+* app : flask app
+* db : mysql db
+ 
 실행
 ```sh
 docker-compose build
@@ -49,3 +54,8 @@ curl -X GET http://localhost:8080/tournament/2
  pip install -r app/requirements-dev.txt
  pytest app
 ```
+
+
+## db schema
+
+mysql docker 최초 실행시에  [init.sql](db\init.sql) 스크립트 실행됨
