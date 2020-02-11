@@ -1,0 +1,2 @@
+# requirements.txt
+pytest>=5.3
