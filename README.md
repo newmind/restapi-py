@@ -45,8 +45,23 @@ curl -X POST 'http://localhost:8080/tournament' \
 # get 
 curl -X GET http://localhost:8080/tournament/2
 
+# patch
+curl -X PATCH 'http://localhost:8080/tournament/2' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"title":"2 modified",
+	"gameName": "bonjour",
+	"playerCount": 30,
+	"location": "ONLINE"
+}'
+
+# search
+curl -X GET 'http://localhost:8080/search?keyword=test'
+
 # delete 
-curl -X GET http://localhost:8080/tournament/2
+curl -X GET http://localhost:8080/stournament/2
+
+
 ```
 
 ## Unit Test
