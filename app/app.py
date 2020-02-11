@@ -1,18 +1,17 @@
-import json
-from flask import Flask, abort, jsonify, request
+from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
-from datetime import datetime
-from model.tournament import Tournament, Post, Cats
+from model.tournament import Tournament
 from model import db
 
 import config
-import database
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config.alchemy_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.app_context().push()
 db.init_app(app)
+
+
 # db.create_all()
 
 
@@ -137,104 +136,6 @@ def search_tournament():
         'data': result,
         'message': 'OK'
     })
-
-
-""" posts
-"""
-
-
-@app.route('/posts', methods=['GET'])
-def get_post_list():
-    """ Get paginated posts with url variable `page` and `per_page`
-    """
-    page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
-
-    posts = Post.query.order_by(Post.id.desc()).paginate(page, per_page, error_out=False)
-    result = [post.as_dict() for post in posts.items]
-
-    return jsonify({
-        'page': page,
-        'per_page': per_page,
-        'total': posts.total,
-        'result': result,
-    })
-
-
-@app.route('/post/<int:id>', methods=['GET'])
-def get_post(id):
-    """ Get the post with request URL arg `id`
-    """
-    post = Post.query.get(id)
-    if not post:
-        return abort(404)
-
-    return jsonify(post.as_dict())
-
-
-@app.route('/post', methods=['POST'])
-def create_post():
-    """ Create post with request data
-    """
-    params = request.get_json()
-
-    if not params or 'content' not in params or 'author_email' not in params:
-        return jsonify({'error': 'Arguments Missed'}), 400
-
-    post = Post(
-        content=params['content'],
-        author_email=params['author_email'],
-        created_time=datetime.now(),
-    )
-    db.session.add(post)
-    db.session.commit()
-
-    return jsonify({'result': 'success', 'id': post.id}), 201
-
-
-""" Cats
-"""
-
-
-@app.route('/cat/', methods=['GET'])
-def fetch():
-    cats = database.get_all(Cats)
-    all_cats = []
-    for cat in cats:
-        new_cat = {
-            "id": cat.id,
-            "name": cat.name,
-            "price": cat.price,
-            "breed": cat.breed
-        }
-
-        all_cats.append(new_cat)
-    return json.dumps(all_cats), 200
-
-
-@app.route('/cat/add', methods=['POST'])
-def add():
-    data = request.get_json()
-    name = data['name']
-    price = data['price']
-    breed = data['breed']
-
-    database.add_instance(Cats, name=name, price=price, breed=breed)
-    return json.dumps("Added"), 200
-
-
-@app.route('/cat/remove/<cat_id>', methods=['DELETE'])
-def remove(cat_id):
-    database.delete_instance(Cats, id=cat_id)
-    return json.dumps("Deleted"), 200
-
-
-@app.route('/cat/edit/<cat_id>', methods=['PATCH'])
-def edit(cat_id):
-    data = request.get_json()
-    new_price = data['price']
-    database.edit_instance(Cats, id=cat_id, price=new_price)
-    return json.dumps("Edited"), 200
 
 
 if __name__ == '__main__':
