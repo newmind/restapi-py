@@ -100,11 +100,13 @@ def get_tournament(id):
 @app.route('/tournament/<int:id>', methods=['PATCH'])
 def update_tournament(id):
     params = request.get_json()
-    Tournament.query.filter(Tournament.id==id).update(params)
-    db.session.commit()
-    # app.debug(t)
 
-    pass
+    tm = Tournament.query.get(id)
+    for key, value in params.items():
+        setattr(tm, key, value)
+    db.session.commit()
+
+    return jsonify({'data': tm.as_dict(), 'message': 'OK'}), 200
 
 
 @app.route('/tournament/<int:id>', methods=['DELETE'])

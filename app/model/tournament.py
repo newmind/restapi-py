@@ -19,6 +19,7 @@ class Tournament(db.Model):
             (c.name, getattr(self, c.name))
             for c in self.__table__.columns)
 
+
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
