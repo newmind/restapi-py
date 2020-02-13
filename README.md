@@ -59,7 +59,7 @@ curl -X PATCH 'http://localhost:8080/tournament/2' \
 curl -X GET 'http://localhost:8080/search?keyword=test'
 
 # delete 
-curl -X DELETE http://localhost:8080/stournament/2
+curl -X DELETE http://localhost:8080/tournament/2
 
 
 ```
