@@ -1,7 +1,7 @@
 # 환경
 
 실행 환경
-* docker, docker-compose
+* docker (> 19.0), docker-compose (> 1.25)
 
 개발 환경
 * python 3.7
@@ -59,7 +59,7 @@ curl -X PATCH 'http://localhost:8080/tournament/2' \
 curl -X GET 'http://localhost:8080/search?keyword=test'
 
 # delete 
-curl -X GET http://localhost:8080/stournament/2
+curl -X DELETE http://localhost:8080/stournament/2
 
 
 ```
